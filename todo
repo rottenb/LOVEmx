@@ -1,0 +1,32 @@
+      CLEAN UP (code, dir structure, etc)
+**    joystick
+      ui
+      collision (crash)
+      alternate materials (slow, slippery, etc)
+      flesh out animations (wheelie, crash)
+??    controls (accel/brake, etc)
+xx    miniMap
+      leaderboard
+xx    bike dashboard
+**    endless scrolling
+      splash screen
+      level select
+      ai bikers
+xx    lap timer
+**    laps
+      rpg
+      read spawn position from Tiled map
+      figure out Sprites layer programmically
+            ^ set layer spawn in Tiled, read in STI
+      Y scroll limits
+      github
+**    figure out fonts
+      career mode
+      draw more maps
+      draw tiles
+xx    implement class/oop
+      gamestate
+xx    flags (yellow, white, blue?)
+??    restart game
+      animations (katsudo?)
+      wheelies
