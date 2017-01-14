@@ -29,6 +29,7 @@ function riderInit(spawnX, spawnY, spriteLayer)
     local WLI4_FRAME = frameSize * 9
     local WLI5_FRAME = frameSize * 10
 
+
     -- RIDER OBJECT
     playerOne.sprite = {
       -- image data

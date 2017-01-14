@@ -60,17 +60,22 @@ function love.load(arg)
   leaderBoardFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 30)
   winFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 120)
 
-  -- add sprite layers
+  -- READ IN PLAYER SPAWN POINT, ADD PLAYER TO LAP MAPS --
+  local playerSpawn
+  for k,object in pairs(trackLapList[currentLap].objects) do
+    if object.name == "Spawn" then
+      playerSpawn = object
+    end
+  end
+
   for i = 1,lapTotal do
     if i == 1 then
-      riderInit(50,200, trackLapList[i].layers["Sprites"])
+      riderInit(playerSpawn.x,playerSpawn.y, trackLapList[i].layers["Sprites"])
     else
       riderInit(-32,-32, trackLapList[i].layers["Sprites"])
     end
   end
 end -- love.load()
-
-
 
 -- ***************
 -- * love.update *

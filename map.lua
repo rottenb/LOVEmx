@@ -11,11 +11,20 @@ function mapInit(laps)
     -- physics
     trackLapList[i]:box2d_init(gameWorld)
     -- add layer for sprites
-    trackLapList[i]:addCustomLayer("Sprites", 7)
+    local spawnLayer
+    local count = 0
+    for k,layer in pairs(trackLapList[i].layers) do
+      count = count + 1
+      if layer.name == "Player" then
+        spawnLayer = count
+        break
+      end
+    end
+
+    trackLapList[i]:addCustomLayer("Sprites", spawnLayer + 2)
 
     ox = ox + trackLapList[i].width*32
   end
-      print("loaded")
 
   -- print version numbers of libraries/modules
   if DEBUG then

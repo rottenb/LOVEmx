@@ -8,7 +8,7 @@ return {
   height = 20,
   tilewidth = 32,
   tileheight = 32,
-  nextobjectid = 5,
+  nextobjectid = 6,
   properties = {},
   tilesets = {
     {
@@ -368,6 +368,31 @@ return {
     },
     {
       type = "objectgroup",
+      name = "Player",
+      visible = false,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      draworder = "topdown",
+      properties = {},
+      objects = {
+        {
+          id = 5,
+          name = "Spawn",
+          type = "",
+          shape = "rectangle",
+          x = 44,
+          y = 305,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = false,
+          properties = {}
+        }
+      }
+    },
+    {
+      type = "objectgroup",
       name = "collision",
       visible = false,
       opacity = 1,
@@ -468,7 +493,7 @@ return {
       y = 0,
       width = 50,
       height = 20,
-      visible = true,
+      visible = false,
       opacity = 1,
       offsetx = 0,
       offsety = 0,

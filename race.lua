@@ -40,22 +40,29 @@ function raceDraw(ww, wh)
 
   -- find the difference between where the sprite is on the map
   -- and how much the map should scroll inside the window
-  local tx = math.floor(-sprite.x + ww / 2 - 16)
-  local ty = math.floor(-sprite.y + wh / 2 - 16)
+  local tx = math.floor(-sprite.x + ww/2 - 16)
+  local ty = math.floor(-sprite.y + wh/2 - 16)
 
-  if math.floor(sprite.x) >= maxX - ww / 2 then
+  if math.floor(sprite.x) >= maxX - ww/2 then
     tx = ww - maxX
   elseif tx > 0 then
     tx = 0
   end
 
-  -- NOT SURE whERE -152 COMES FROM
+	if math.floor(sprite.y) > maxY - wh/2 then
+		ty = wh - maxY
+	elseif ty > 0 then
+		ty = 0
+	end
+	print(tx..", "..ty)
+--[[
+  -- NOT SURE WHERE -152 COMES FROM!!
   if ty <= -152 then
     ty = -152
   elseif ty > 0 then
     ty = 0
   end
-
+]]
   love.graphics.push()
   love.graphics.translate(tx, ty)
 
