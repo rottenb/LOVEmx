@@ -20,11 +20,6 @@ function raceUpdate(dt)
     end
   end
 
-	if WHEELIE_COUNTER > -1 and WHEELIE_COUNTER < 4 then
-		sprite.riderState = WHEELIEUP + 1
-		WHEELIE_COUNTER = WHEELIE_COUNTER + 1
-	end
-
 	local ox = trackLapList[currentLap].width * (currentLap - 1)
 	local tileX = math.floor(sprite.x/32 - ox)
 	local tileY = math.floor(sprite.y/32)
