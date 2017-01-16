@@ -49,9 +49,6 @@ function love.load(arg)
   -- INPUT --
   initJoystick()
 
-  -- MINI MAP --
-  miniMapImage = love.graphics.newImage("resources/maps/thunder_valley_trackmap.png")
-
   -- LAP COUNTER --
   currentLap = 1
   ogFont = love.graphics.getFont()
@@ -84,6 +81,7 @@ function love.update(dt)
   if gameState == RACE then
     raceUpdate(dt)
   elseif gameState == FINISH then
+    love.event.quit()
     if love.keyboard.isDown("space") then
       gameState = RACE
       local arg = {track_title}

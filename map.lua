@@ -21,7 +21,7 @@ function mapInit(laps)
       end
     end
 
-    trackLapList[i]:addCustomLayer("Sprites", spawnLayer + 2)
+    trackLapList[i]:addCustomLayer("Sprites", spawnLayer)
 
     ox = ox + trackLapList[i].width*32
   end

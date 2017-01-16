@@ -1,4 +1,5 @@
-
+HEAT_ELAPSED = 0
+HEAT_FLIP = 10
 
 -- RIDER STATE CONSTANTS
 IDLE = 1
@@ -39,9 +40,14 @@ function riderInit(spawnX, spawnY, spriteLayer)
       y = spawnY,
       -- player attributes
       speed = 0,
+      heat = 0,
       -- animation frames
       animFrame = 0,
       riderState = IDLE,
+      effects = {
+        slow = false,
+        offsetZ = 0,
+      },
       frames = {
         love.graphics.newQuad(IDLE_FRAME, 0, frameSize, frameSize, imageWidth, imageHeight),
         love.graphics.newQuad(IDLE_FRAME, ALT_FRAME, frameSize, frameSize, imageWidth, imageHeight),
@@ -84,13 +90,38 @@ function riderInit(spawnX, spawnY, spriteLayer)
       local sprite = trackLapList[currentLap].layers["Sprites"].sprite
     	local x, y = 0, 0
 
+      if sprite.riderState == COAST then
+        if sprite.heat > 0 then
+          sprite.heat = sprite.heat - 1
+          if HEAT_ELAPSED > 0 then
+            HEAT_ELAPSED = HEAT_ELAPSED - 1
+          end
+        end
+      end
+
       if joystick ~= nil then
         -- 1 = gas, 2 = brake
-
         if joystick:isDown(1) then
           sprite.riderState = FORWARD
-          if sprite.speed < 8000 then
+          local speedX = 8000
+
+          if sprite.effects["slow"] then
+            speedX = 3000
+          else
+            speedX = 8000
+          end
+
+          if sprite.speed < speedX then
             sprite.speed = sprite.speed + 500
+          else
+            sprite.speed = speedX
+          end
+
+          if sprite.heat < 12 and HEAT_ELAPSED == HEAT_FLIP then
+            sprite.heat = sprite.heat + 1
+            HEAT_ELAPSED = 0
+          else
+            HEAT_ELAPSED = HEAT_ELAPSED + 1
           end
 
           x = sprite.speed
@@ -104,6 +135,11 @@ function riderInit(spawnX, spawnY, spriteLayer)
           if sprite.speed < 0 then
             sprite.speed = 0
           end
+
+          if sprite.heat > 0 then
+            sprite.heat = sprite.heat - 1
+          end
+
           x = sprite.speed
         end
 
@@ -141,8 +177,7 @@ function riderInit(spawnX, spawnY, spriteLayer)
   		local x = math.floor(self.sprite.x)
   		local y = math.floor(self.sprite.y)
       local ox = 24 -- collision box
-      local oy = 38 -- just the bike
-      -- love.graphics.draw( drawable, quad, x, y, r, sx, sy, ox, oy, kx, ky )
+      local oy = 38 + self.sprite.effects["offsetZ"] -- just the bike
   		love.graphics.draw(image, frame, x, y, r, sx, sy, ox, oy)
   	end -- playerOne:draw()
 

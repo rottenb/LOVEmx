@@ -15,8 +15,7 @@ xx    lap timer
 **    laps
 **    read spawn position from Tiled map
 **    figure out Sprites layer programmically
-**          ^ set layer spawn in Tiled, read in STI
-      Y scroll limits
+**    Y scroll limits
 **    github
 **    figure out fonts
       career mode/rpg
@@ -29,3 +28,4 @@ xx    flags (yellow, white, blue?)
 ??    restart game
       animations
       wheelies
+      throttle/heat

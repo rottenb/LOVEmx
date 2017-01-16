@@ -1,15 +1,17 @@
 ANIM_ELAPSED = 0
+ANIM_FLIP = 0.05
+
 WHEELIE_COUNTER = -1
 
 -- WHAT TO DO DURING A RACE --
 function raceUpdate(dt)
-	  trackLapList[currentLap]:update(dt)
+	trackLapList[currentLap]:update(dt)
 
 	-- Update sprite's coordinates
 	local sprite = trackLapList[currentLap].layers["Sprites"].sprite
 
   ANIM_ELAPSED = ANIM_ELAPSED + dt
-  if ANIM_ELAPSED >= 0.05 then
+  if ANIM_ELAPSED >= ANIM_FLIP then
     ANIM_ELAPSED = 0
     if sprite.animFrame == 0 then
       sprite.animFrame = 1
@@ -23,7 +25,17 @@ function raceUpdate(dt)
 		WHEELIE_COUNTER = WHEELIE_COUNTER + 1
 	end
 
-end
+	local ox = trackLapList[currentLap].width * (currentLap - 1)
+	local tileX = math.floor(sprite.x/32 - ox)
+	local tileY = math.floor(sprite.y/32)
+
+	local properties = trackLapList[currentLap]:getTileProperties("rider_effects", tileX, tileY)
+	sprite.effects["slow"] = properties["slow"]
+	if properties["offsetZ"] ~= nil then
+		sprite.effects["offsetZ"] = properties["offsetZ"]
+	end
+
+end -- raceUpdate()
 
 function raceDraw(ww, wh)
   local sprite = trackLapList[currentLap].layers["Sprites"].sprite
@@ -49,20 +61,13 @@ function raceDraw(ww, wh)
     tx = 0
   end
 
+	-- cheat with 152 for 20tile high map
 	if math.floor(sprite.y) > maxY - wh/2 then
-		ty = wh - maxY
+		ty = wh - maxY - 16
 	elseif ty > 0 then
 		ty = 0
 	end
-	print(tx..", "..ty)
---[[
-  -- NOT SURE WHERE -152 COMES FROM!!
-  if ty <= -152 then
-    ty = -152
-  elseif ty > 0 then
-    ty = 0
-  end
-]]
+
   love.graphics.push()
   love.graphics.translate(tx, ty)
 
@@ -81,7 +86,11 @@ function raceDraw(ww, wh)
 
     -- player collision box
     love.graphics.setColor(255, 0, 0, 255)
-    love.graphics.polygon("line", sprite.body:getWorldPoints(sprite.shape:getPoints()))
+    love.graphics.polygon('line', sprite.body:getWorldPoints(sprite.shape:getPoints()))
+
+		-- player location offset
+		love.graphics.setColor(255,255,255,255)
+		love.graphics.circle('fill', sprite.x, sprite.y, 5)
 
     love.graphics.pop()
 
@@ -121,8 +130,30 @@ function raceDraw(ww, wh)
   love.graphics.print("5. kennedy?", next * 4, spaceY)
 
   -- BIKE DASHBOARD --
+--[[
 	love.graphics.setFont(lapFont)
+	local blue = {0,0,255,255}
+	local yellow = {255,255,0,255}
+	local orange = {255,128,0,255}
+	local red = {255,0,0,255}
 
+	local heat = {
+		[1] = blue,
+		[2] = yellow,
+		[3] = orange,
+		[4] = red,
+	}
+
+	local heatStr = {}
+	for i=1,sprite.heat do
+		local color = heat[math.floor(i / 3) + 1]
+		table.insert(heatStr, color)
+		table.insert(heatStr, ">")
+	end
+
+	love.graphics.printf(heatStr, 5, 0, ww, 'left')
+	]]
+	--[[
 	love.graphics.setColor(0,0,255,255)
 	love.graphics.printf(">>>", 5, 0, ww, 'left')
 	love.graphics.setColor(255,255,0,255)
@@ -131,6 +162,7 @@ function raceDraw(ww, wh)
 	love.graphics.printf(">>>", 100, 0, ww, 'left')
 	love.graphics.setColor(255,0,0,255)
 	love.graphics.printf(">>>", 147, 0, ww, 'left')
+	]]
 
   -- LAP COUNTER --
   love.graphics.setColor(255, 255, 255, 100)
