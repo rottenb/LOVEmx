@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="200" height="20" tilewidth="32" tileheight="32" nextobjectid="15">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="200" height="20" tilewidth="32" tileheight="32" nextobjectid="17">
  <tileset firstgid="1" name="atlas" tilewidth="32" tileheight="32" tilecount="99" columns="9">
   <image source="atlas.png" width="288" height="352"/>
   <terraintypes>
@@ -296,6 +296,12 @@
   </object>
   <object id="11" x="2672" y="256">
    <polyline points="0,0 164,160 164,196 206,234 568,236 624,180 698,178 706,144 1016,142 1040,172 1116,188 1128,202 1276,198 1280,178 1392,176 1508,62 1392,14 1356,-6 1286,-4 1248,-28 1098,-30 1040,-2 978,2 952,26 422,26 386,-6 328,-10 298,-38 258,-38 240,-62 192,-66 180,-98 100,-96 72,-66 48,-44 2,-42 -2,-2"/>
+  </object>
+  <object id="15" x="6272" y="170">
+   <polyline points="0,0 127,-2"/>
+  </object>
+  <object id="16" x="6271" y="310">
+   <polyline points="0,0 142,3"/>
   </object>
  </objectgroup>
 </map>

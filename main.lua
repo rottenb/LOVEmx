@@ -6,6 +6,7 @@ require "map"
 require "rider"
 require "race"
 require "controls"
+require "race_ui"
 
 -- MISC FLAGS, COUNTERS, AND SUCH
 DRAW_COLLISION = true
@@ -95,6 +96,7 @@ function love.draw()
 
   if gameState == RACE then
     raceDraw(ww, wh)
+    race_uiDraw()
   elseif gameState == FINISH then
     love.graphics.origin()
     love.graphics.setFont(winFont)

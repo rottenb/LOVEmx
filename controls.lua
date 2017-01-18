@@ -18,6 +18,7 @@ local bindings = {
   wheelieup = function() wheelieUp() end,
   wheeliedown = function() wheelieDown() end,
   debug = function() toggleDebug() end,
+  shuffleleader = function() shuffleLeader() end,
 }
 
 local keys = {
@@ -37,7 +38,7 @@ local buttons = {
   [13] = "quitgame",
   [1] = "hitgas",
   [2] = "hitbrake",
-
+  [3] = "shuffleleader",
   released = "coast",
 }
 
@@ -122,4 +123,10 @@ end
 function wheelieDown()
   trackLapList[currentLap].layers["Sprites"].sprite.riderState = COAST
   WHEELIE_COUNTER = -1
+end
+
+function shuffleLeader()
+  local temp = leaderBoard[3]
+  leaderBoard[3] = leaderBoard[1]
+  leaderBoard[1] = temp
 end

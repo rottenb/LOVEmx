@@ -47,6 +47,7 @@ function riderInit(spawnX, spawnY, spriteLayer)
       effects = {
         slow = false,
         offsetZ = 0,
+        rotate = 0,
       },
       frames = {
         love.graphics.newQuad(IDLE_FRAME, 0, frameSize, frameSize, imageWidth, imageHeight),
@@ -78,11 +79,13 @@ function riderInit(spawnX, spawnY, spriteLayer)
     }
 
   	playerOne.sprite.body = love.physics.newBody(gameWorld, playerOne.sprite.x/2, playerOne.sprite.y, "dynamic")
-    playerOne.sprite.body:setMass(100)
   	playerOne.sprite.body:setLinearDamping(10)
   	playerOne.sprite.body:setFixedRotation(true)
 
-  	playerOne.sprite.shape   = love.physics.newRectangleShape(48, 24)
+    local shapeX = 48
+    local shapeY = 24
+    shapeX, shapeY = 24, 12
+  	playerOne.sprite.shape   = love.physics.newRectangleShape(shapeX, shapeY)
   	playerOne.sprite.fixture = love.physics.newFixture(playerOne.sprite.body, playerOne.sprite.shape)
 
   	-- Override Update callback
@@ -101,18 +104,19 @@ function riderInit(spawnX, spawnY, spriteLayer)
 
       if joystick ~= nil then
         -- 1 = gas, 2 = brake
+        local s = 2000
         if joystick:isDown(1) then
           sprite.riderState = FORWARD
-          local speedX = 8000
+          local speedX = s
 
           if sprite.effects["slow"] then
-            speedX = 3000
+            speedX = s / 3
           else
-            speedX = 8000
+            speedX = s
           end
 
           if sprite.speed < speedX then
-            sprite.speed = sprite.speed + 500
+            sprite.speed = sprite.speed + 50
           else
             sprite.speed = speedX
           end
@@ -130,7 +134,7 @@ function riderInit(spawnX, spawnY, spriteLayer)
         if joystick:isDown(2) then
           sprite.riderState = COAST
           if sprite.speed > 0 then
-            sprite.speed = sprite.speed - 4000
+            sprite.speed = sprite.speed - 100
           end
           if sprite.speed < 0 then
             sprite.speed = 0
@@ -175,9 +179,10 @@ function riderInit(spawnX, spawnY, spriteLayer)
   		local image = self.sprite.image
       local frame = self.sprite.frames[self.sprite.riderState + self.sprite.animFrame]
   		local x = math.floor(self.sprite.x)
-  		local y = math.floor(self.sprite.y)
-      local ox = 24 -- collision box
-      local oy = 38 + self.sprite.effects["offsetZ"] -- just the bike
+  		local y = math.floor(self.sprite.y - self.sprite.effects["offsetZ"])
+      local ox = 24
+      local oy = 40
+      local r = self.sprite.effects["rotate"]
   		love.graphics.draw(image, frame, x, y, r, sx, sy, ox, oy)
   	end -- playerOne:draw()
 
