@@ -19,7 +19,6 @@ function race_uiDraw()
     love.graphics.pop()
 
     -- FPS counter
-		love.graphics.setFont(lapFont)
 		love.graphics.setColor(0,255,0,200)
 		local fps = "FPS: " .. love.timer.getFPS()
     love.graphics.printf(fps, 0, 0, ww, 'center')
@@ -37,14 +36,9 @@ function race_uiDraw()
   love.graphics.rectangle('fill', 0, wh - 30, ww, wh)
 
   -- LEADER BOARD --
-  love.graphics.setFont(leaderBoardFont)
-  for i = 1, 5 do
-    love.graphics.setColor(leaderBoard[i][1])
-    love.graphics.print(i .. ". " .. leaderBoard[i][2], 5 + (ww/5) * (i-1), wh - 29)
-  end
+  leaderBoardDraw()
 
   -- BIKE DASHBOARD --
-	love.graphics.setFont(lapFont)
 	local blue = {0,0,255,255}
 	local yellow = {255,255,0,255}
 	local orange = {255,128,0,255}
@@ -64,16 +58,15 @@ function race_uiDraw()
 		table.insert(heatStr, ">")
 	end
 
-	love.graphics.printf(heatStr, 5, 0, ww, 'left')
+	love.graphics.printf(heatStr, 5, 0, ww+4, 'left', 0, 1.3, 1.3)
 
   -- LAP COUNTER --
   love.graphics.setColor(255, 255, 255, 100)
-  love.graphics.setFont(lapFont)
   if currentLap == lapTotal then
     love.graphics.setColor(255,255,255,255)
-    love.graphics.printf("FINAL LAP!", 0, 0, ww, 'right')
+    love.graphics.printf("FINAL LAP!", 0, 4, ww - 4, 'right')
   else
-    love.graphics.printf("LAP: " .. currentLap .. " / " .. lapTotal, 0, 0, ww, 'right')
+    love.graphics.printf("LAP: " .. currentLap .. " / " .. lapTotal, 0, 4, ww - 4, 'right')
   end
 
   love.graphics.setColor(255,255,255,255)

@@ -7,6 +7,7 @@ require "rider"
 require "race"
 require "controls"
 require "race_ui"
+require "leaderboard"
 
 -- MISC FLAGS, COUNTERS, AND SUCH
 DRAW_COLLISION = true
@@ -50,12 +51,22 @@ function love.load(arg)
   -- INPUT --
   initJoystick()
 
+  love.graphics.setDefaultFilter("nearest", "nearest")
+
+
   -- LAP COUNTER --
   currentLap = 1
+  gameFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 30)
+  love.graphics.setFont(gameFont)
+
+  -- LEADERBOARD --
+  leaderBoardLoad()
+
+  --[[
   ogFont = love.graphics.getFont()
   lapFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 40)
   overheatFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 30)
-  leaderBoardFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 30)
+  leaderBoardFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 30)]]
   winFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 120)
 
   -- READ IN PLAYER SPAWN POINT, ADD PLAYER TO LAP MAPS --
@@ -101,16 +112,9 @@ function love.draw()
     love.graphics.origin()
     love.graphics.setFont(winFont)
     love.graphics.printf("ok, you won", 0, wh/2 - 100, ww, 'center')
-    love.graphics.setFont(leaderBoardFont)
+    love.graphics.setFont(gameFont)
     love.graphics.printf("press SPACE to restart", 0, wh - 50, ww, 'center')
-
-    love.graphics.setFont(ogFont)
     love.graphics.printf("(or CMD-Q to exit)", 0, wh - 30, ww - 10, 'right')
-  elseif gameState == TEST then
-    love.graphics.setColor(255,255,255,255)
-    tst = love.graphics.newImage("resources/dickbutt_inv.jpg")
-  --love.graphics.draw(drawable, x, y, r, sx, sy, ox, oy, kx, ky)
-    love.graphics.draw(tst, 100, 100, 0, 0.2, 0.2, 0, 0, 0, 1)
   end
 end -- love.draw()
 

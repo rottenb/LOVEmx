@@ -3,13 +3,6 @@ ANIM_FLIP = 0.05
 
 WHEELIE_COUNTER = -1
 
-leaderBoard = {
-	{{255,255,0,200}, "ROCZEN"},
-	{{255,128,51,200}, "DUNGEY"},
-	{{0,255,0,200}, "TOMAC"},
-	{{180,180,255,200}, "REED"},
-	{{255,128,255,200}, "kennedy?"},
-}
 
 -- WHAT TO DO DURING A RACE --
 function raceUpdate(dt)
@@ -42,7 +35,7 @@ function raceUpdate(dt)
 		sprite.effects["offsetZ"] = sprite.effects["offsetZ"]
 	end
 
-
+	leaderBoardUpdate()
 end -- raceUpdate()
 
 function raceDraw(ww, wh)

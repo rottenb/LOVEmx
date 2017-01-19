@@ -126,7 +126,7 @@ function wheelieDown()
 end
 
 function shuffleLeader()
-  local temp = leaderBoard[3]
-  leaderBoard[3] = leaderBoard[1]
-  leaderBoard[1] = temp
+  local temp = riderList[3]
+  riderList[3] = riderList[1]
+  riderList[1] = temp
 end
