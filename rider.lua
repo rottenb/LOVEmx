@@ -1,6 +1,8 @@
 HEAT_ELAPSED = 0
 HEAT_FLIP = 10
 
+FRAME_SIZE = 64
+
 -- RIDER STATE CONSTANTS
 IDLE = 1
 FORWARD = 3
@@ -10,13 +12,13 @@ RIGHT = 9
 WHEELIEUP = 13
 WHEELIEDOWN = 15
 
-function riderInit(spawnX, spawnY, spriteLayer)
+function RiderInit(spawnX, spawnY, spriteLayer)
     local playerOne = spriteLayer
-    local imageMap = love.graphics.newImage("resources/sprites/rider_48.png")
+    local imageMap = love.graphics.newImage("resources/sprites/rider_64.png")
     local imageWidth = imageMap:getWidth()
     local imageHeight = imageMap:getHeight()
 
-    local frameSize = 48
+    local frameSize = FRAME_SIZE
 
     local ALT_FRAME = frameSize
     local IDLE_FRAME = frameSize * 0
@@ -30,7 +32,6 @@ function riderInit(spawnX, spawnY, spriteLayer)
     local WLI4_FRAME = frameSize * 9
     local WLI5_FRAME = frameSize * 10
 
-
     -- RIDER OBJECT
     playerOne.sprite = {
       -- image data
@@ -41,12 +42,14 @@ function riderInit(spawnX, spawnY, spriteLayer)
       -- player attributes
       speed = 0,
       heat = 0,
+      jump = 0,
       -- animation frames
       animFrame = 0,
       riderState = IDLE,
       effects = {
         slow = false,
         offsetZ = 0,
+        jumpZ = 0,
         rotate = 0,
       },
       frames = {
@@ -82,9 +85,8 @@ function riderInit(spawnX, spawnY, spriteLayer)
   	playerOne.sprite.body:setLinearDamping(10)
   	playerOne.sprite.body:setFixedRotation(true)
 
-    local shapeX = 48
-    local shapeY = 24
-    shapeX, shapeY = 24, 12
+    local shapeX = FRAME_SIZE
+    local shapeY = FRAME_SIZE/2
   	playerOne.sprite.shape   = love.physics.newRectangleShape(shapeX, shapeY)
   	playerOne.sprite.fixture = love.physics.newFixture(playerOne.sprite.body, playerOne.sprite.shape)
 
@@ -102,21 +104,23 @@ function riderInit(spawnX, spawnY, spriteLayer)
         end
       end
 
+      local s = 16000
+
+      -- joystck controlls
       if joystick ~= nil then
         -- 1 = gas, 2 = brake
-        local s = 2000
         if joystick:isDown(1) then
           sprite.riderState = FORWARD
           local speedX = s
 
           if sprite.effects["slow"] then
-            speedX = s / 3
+            speedX = s / 1.5
           else
             speedX = s
           end
 
           if sprite.speed < speedX then
-            sprite.speed = sprite.speed + 50
+            sprite.speed = sprite.speed + 800
           else
             sprite.speed = speedX
           end
@@ -147,13 +151,77 @@ function riderInit(spawnX, spawnY, spriteLayer)
           x = sprite.speed
         end
 
-        if joystick:getHat(1) == 'u' and sprite.speed > 0 then
+        if sprite.speed > 0 and sprite.jump == 0 then
+          if joystick:getHat(1) == 'u' then
+            sprite.riderState = LEFT
+            y = -sprite.speed
+          elseif joystick:getHat(1) == 'd' then
+            sprite.riderState = RIGHT
+            y = sprite.speed
+          end
+        end
+      end
+
+      -- keyboard
+      if love.keyboard.isDown("right") then
+        sprite.riderState = FORWARD
+        local speedX = s
+
+        if sprite.effects["slow"] then
+          speedX = s / 3
+        else
+          speedX = s
+        end
+
+        if sprite.speed < speedX then
+          sprite.speed = sprite.speed + 50
+        else
+          sprite.speed = speedX
+        end
+
+        if sprite.heat < 12 and HEAT_ELAPSED == HEAT_FLIP then
+          sprite.heat = sprite.heat + 1
+          HEAT_ELAPSED = 0
+        else
+          HEAT_ELAPSED = HEAT_ELAPSED + 1
+        end
+
+        x = sprite.speed
+      end
+
+      if sprite.speed > 0 and sprite.jump == 0 then
+        if love.keyboard.isDown("w") then
           sprite.riderState = LEFT
           y = -sprite.speed
-        elseif joystick:getHat(1) == 'd' and sprite.speed > 0 then
+        elseif love.keyboard.isDown("s") then
           sprite.riderState = RIGHT
           y = sprite.speed
         end
+      end
+
+      local jumpCount = 25
+      local jumpArch = { 0,   5,  10,  20,  30,
+                        40,  50,  60,  80,  80,
+                        90, 100, 100, 100,  90,
+                        80,  80,  60,  50,  40,
+                        30,  20,  10,   5,   0 }
+
+      local jumpAngle = {-40, -30, -20, -15, -10,
+                          -5,  -5,  -5,   0,   0,
+                           0,   0,   0,   0,   0,
+                           0,   0,   0,  10,  10,
+                          10,  10,   5,   5,   0 }
+
+      local whoopCount
+      local whoop = { 0, 5, 10, 15, 20 }
+
+      if sprite.jump > 0 and sprite.jump <= jumpCount then
+        sprite.effects["jumpZ"] = jumpArch[sprite.jump]
+        sprite.effects["rotate"] = math.rad(jumpAngle[sprite.jump])
+        sprite.jump = sprite.jump + 1
+      else
+        sprite.jump = 0
+        sprite.effects["jumpZ"] = 0
       end
 
       sprite.body:applyForce(x, y)
@@ -161,7 +229,11 @@ function riderInit(spawnX, spawnY, spriteLayer)
 
       local endx = trackLapList[currentLap].width *32 * currentLap
       if math.floor(sprite.x) >= endx then
+        local pos = 5 - (currentLap - 1)
         if currentLap ~= lapTotal then
+          if pos > 1 then
+            swapRiders(pos, pos - 1)
+          end
           currentLap = currentLap + 1
         end
         trackLapList[currentLap].layers["Sprites"].sprite = sprite
@@ -179,7 +251,8 @@ function riderInit(spawnX, spawnY, spriteLayer)
   		local image = self.sprite.image
       local frame = self.sprite.frames[self.sprite.riderState + self.sprite.animFrame]
   		local x = math.floor(self.sprite.x)
-  		local y = math.floor(self.sprite.y - self.sprite.effects["offsetZ"])
+  		local y = math.floor(self.sprite.y - self.sprite.effects["offsetZ"] - self.sprite.effects["jumpZ"])
+    --  local y = math.floor(self.sprite.y - self.sprite.effects["jumpZ"])
       local ox = 24
       local oy = 40
       local r = self.sprite.effects["rotate"]

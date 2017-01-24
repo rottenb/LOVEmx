@@ -1,55 +1,15 @@
-
-PLAYER_ONE = 1
-
-gameStates = {}
-
-function initJoystick()
+function InitJoystick()
   local jsList = love.joystick.getJoysticks()
   joystick = jsList[1]
 end
 
-local bindings = {
-  quitgame = function() love.event.quit() end,
-  turnleft = function() turnLeft() end,
-  turnright = function() turnRight() end,
-  hitgas = function() hitGas() end,
-  hitbrake = function() hitBrake() end,
-  coast = function() coast() end,
-  wheelieup = function() wheelieUp() end,
-  wheeliedown = function() wheelieDown() end,
-  debug = function() toggleDebug() end,
-  shuffleleader = function() shuffleLeader() end,
-}
-
-local keys = {
-  escape = "quitgame",
-  up = "turnleft",
-  down = "turnright",
-  d = "hitgas",
-  s = "hitbrake",
-  left = "wheelieup",
-  right = "wheeliedown",
-
-  released = "coast",
-}
-
-local buttons = {
-  [14] = "debug",
-  [13] = "quitgame",
-  [1] = "hitgas",
-  [2] = "hitbrake",
-  [3] = "shuffleleader",
-  released = "coast",
-}
-
-local gamepad = {
-  u = "turnleft",
-  d = "turnright",
-  l = "wheelieup",
-  r = "wheeliedown",
-
-  c = "coast",
-}
+function ControlsInit()
+  if GAME_STATE == RACE then
+    require "stick_bindings"
+  elseif GAME_STATE == MAIN then
+    require "menu_bindings"
+  end
+end
 
 function toggleDebug()
   if DEBUG then
@@ -96,6 +56,9 @@ function love.joystickhat(joystick, hat, dir)
 end
 
 function hitGas()
+  if timerStart == false then
+    timerStart = true
+  end
   trackLapList[currentLap].layers["Sprites"].sprite.riderState = FORWARD
 end
 
@@ -125,8 +88,6 @@ function wheelieDown()
   WHEELIE_COUNTER = -1
 end
 
-function shuffleLeader()
-  local temp = riderList[3]
-  riderList[3] = riderList[1]
-  riderList[1] = temp
+function jump()
+  trackLapList[currentLap].layers["Sprites"].sprite.jump = 1
 end

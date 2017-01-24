@@ -18,7 +18,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "atlas.png",
+      image = "sheets/atlas.png",
       imagewidth = 288,
       imageheight = 352,
       tileoffset = {
@@ -162,7 +162,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "whoop.png",
+      image = "sheets/whoop.png",
       imagewidth = 96,
       imageheight = 160,
       tileoffset = {

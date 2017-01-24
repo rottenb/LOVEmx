@@ -2,17 +2,18 @@
 
 -- REQUIREMENTS --
 sti = require "sti"
+require "menu"
 require "map"
 require "rider"
 require "race"
 require "controls"
 require "race_ui"
 require "leaderboard"
+require "lap_timer"
 
 -- MISC FLAGS, COUNTERS, AND SUCH
 DRAW_COLLISION = true
 DEBUG = false
-
 
 -- GAME STATE --
 SPLASH = 0
@@ -21,13 +22,13 @@ RACE = 2
 FINISH = 3
 TEST = 666
 
-gameState = RACE
-
+GAME_STATE = RACE
 
 -- ***************
 -- * love.load() *
 -- ***************
 function love.load(arg)
+  MenuLoad()
   -- read in track name from command line.
   -- if track doesn't exist, load the demo_track
   track_title = "none"
@@ -40,27 +41,31 @@ function love.load(arg)
   end
 
   if love.filesystem.exists(track_title) == false then
-  --  print(track_title .. " doesn't exist!  Falling to demo_track")
     track_title = MAP_PATH .. "demo_track.lua"
+    track_title = "random_run"
   end
 
   love.physics.setMeter(32)
   gameWorld = love.physics.newWorld(0,0)
-  mapInit(3)
+  MapInit(10)
 
   -- INPUT --
-  initJoystick()
+  InitJoystick()
+  ControlsInit()
 
-  love.graphics.setDefaultFilter("nearest", "nearest")
+  --love.graphics.setDefaultFilter("nearest", "nearest")
 
 
   -- LAP COUNTER --
   currentLap = 1
-  gameFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 30)
+  gameFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 40)
   love.graphics.setFont(gameFont)
 
+  -- LAP TIMER --
+  LapTimerLoad()
+
   -- LEADERBOARD --
-  leaderBoardLoad()
+  LeaderBoardLoad()
 
   --[[
   ogFont = love.graphics.getFont()
@@ -79,42 +84,57 @@ function love.load(arg)
 
   for i = 1,lapTotal do
     if i == 1 then
-      riderInit(playerSpawn.x,playerSpawn.y, trackLapList[i].layers["Sprites"])
+      RiderInit(playerSpawn.x,playerSpawn.y, trackLapList[i].layers["Sprites"])
     else
-      riderInit(-32,-32, trackLapList[i].layers["Sprites"])
+      RiderInit(-32,-32, trackLapList[i].layers["Sprites"])
     end
   end
+
 end -- love.load()
 
 -- ***************
 -- * love.update *
 -- ***************
 function love.update(dt)
-  if gameState == RACE then
-    raceUpdate(dt)
-  elseif gameState == FINISH then
+  if GAME_STATE == MAIN then
+    MenuUpdate(dt)
+  elseif GAME_STATE == RACE then
+    RaceUpdate(dt)
+  elseif GAME_STATE == FINISH then
     if love.keyboard.isDown("space") then
-      gameState = RACE
+      GAME_STATE = RACE
       local arg = {track_title}
       love.load(arg)
     end
   end
 end -- love.update()
 
+
+-- *************
+-- * love.draw *
+-- *************
 function love.draw()
   ww = love.graphics.getWidth()
   wh = love.graphics.getHeight()
 
-  if gameState == RACE then
-    raceDraw(ww, wh)
-    race_uiDraw()
-  elseif gameState == FINISH then
+  if GAME_STATE == MAIN then
+    MenuDraw()
+  elseif GAME_STATE == RACE then
+    RaceDraw(ww, wh)
+    RaceUIDraw()
+  elseif GAME_STATE == FINISH then
     love.graphics.origin()
     love.graphics.setFont(winFont)
-    love.graphics.printf("ok, you won", 0, wh/2 - 100, ww, 'center')
-    love.graphics.setFont(gameFont)
-    love.graphics.printf("press SPACE to restart", 0, wh - 50, ww, 'center')
-    love.graphics.printf("(or CMD-Q to exit)", 0, wh - 30, ww - 10, 'right')
+
+    local pos = 0
+    for i = 1,5 do
+      if riderList[i][2] == PLAYER_NAME then
+        pos = i
+      end
+    end
+
+    local str = "P" .. pos
+    love.graphics.printf(str, 0, wh/2 - 60, ww, 'center')
   end
 end -- love.draw()
 

@@ -5,7 +5,7 @@ WHEELIE_COUNTER = -1
 
 
 -- WHAT TO DO DURING A RACE --
-function raceUpdate(dt)
+function RaceUpdate(dt)
 	trackLapList[currentLap]:update(dt)
 
 	-- Update sprite's coordinates
@@ -26,19 +26,34 @@ function raceUpdate(dt)
 	local tileY = math.floor(sprite.y/32)
 
 	local properties = trackLapList[currentLap]:getTileProperties("rider_effects", tileX, tileY)
-	sprite.effects["slow"] = properties["slow"]
+	if sprite.jump == 0 then
+		sprite.effects["slow"] = properties["slow"]
+	end
+
+	if properties["offsetZ"] ~= nil then
+		if properties["offsetZ"] > 0 then
+			sprite.jump = 1
+		end
+	end
+--[[
 	if properties["offsetZ"] ~= nil then
 		sprite.effects["offsetZ"] = properties["offsetZ"]
-		sprite.effects["rotate"] = math.rad(-sprite.effects["offsetZ"])
+		if sprite.effects["offsetZ"] > 0 then
+			sprite.effects["rotate"] = math.rad(-sprite.effects["offsetZ"])
+		else
+			sprite.effects["rotate"] = 0
+		end
 	else
 		sprite.effects["rotate"] = 0
 		sprite.effects["offsetZ"] = sprite.effects["offsetZ"]
 	end
+]]
+	LeaderBoardUpdate()
+	LapTimerUpdate(dt)
 
-	leaderBoardUpdate()
 end -- raceUpdate()
 
-function raceDraw(ww, wh)
+function RaceDraw(ww, wh)
   local sprite = trackLapList[currentLap].layers["Sprites"].sprite
 
   local trackW = trackLapList[currentLap].width * 32
@@ -48,7 +63,7 @@ function raceDraw(ww, wh)
   local maxY = trackH
 
   if math.floor(sprite.x) > maxX then
-    gameState = FINISH
+    GAME_STATE = FINISH
   end
 
   -- find the difference between where the sprite is on the map

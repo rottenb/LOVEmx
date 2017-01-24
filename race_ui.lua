@@ -1,4 +1,4 @@
-function race_uiDraw()
+function RaceUIDraw()
   sprite = trackLapList[currentLap].layers["Sprites"].sprite
   -- SHOW DEBUG INFO --
   if DEBUG then
@@ -29,14 +29,19 @@ function race_uiDraw()
   love.graphics.setColor(255,255,255,255)
 
   -- UI BACKGROUNDS --
-  love.graphics.setColor(0, 0, 0, 50)
-  -- bike info, lap counter
-  love.graphics.rectangle('fill', 0, 0, ww, 36)
-  -- leaderboard
-  love.graphics.rectangle('fill', 0, wh - 30, ww, wh)
+  love.graphics.setColor(0, 0, 0, 120)
+  -- leaderboard, bike heat
+  love.graphics.rectangle('fill', 0, 0, ww - 235, 44)
+  -- timer
+  love.graphics.rectangle('fill', ww - 235, -10, 275, 100, 10)
 
   -- LEADER BOARD --
-  leaderBoardDraw()
+  LeaderBoardDraw()
+
+  -- TIMER -
+  LapTimerDraw()
+
+  love.graphics.setFont(gameFont)
 
   -- BIKE DASHBOARD --
 	local blue = {0,0,255,255}
@@ -58,15 +63,15 @@ function race_uiDraw()
 		table.insert(heatStr, ">")
 	end
 
-	love.graphics.printf(heatStr, 5, 0, ww+4, 'left', 0, 1.3, 1.3)
+	love.graphics.printf(heatStr, 250, 0, ww+4, 'left', 0, 1.3, 1.3)
 
   -- LAP COUNTER --
-  love.graphics.setColor(255, 255, 255, 100)
+  love.graphics.setColor(255, 255, 255, 180)
   if currentLap == lapTotal then
     love.graphics.setColor(255,255,255,255)
-    love.graphics.printf("FINAL LAP!", 0, 4, ww - 4, 'right')
+    love.graphics.printf("FINAL LAP!", 5, 4, ww - 4, 'left')
   else
-    love.graphics.printf("LAP: " .. currentLap .. " / " .. lapTotal, 0, 4, ww - 4, 'right')
+    love.graphics.printf("LAP: " .. currentLap .. " / " .. lapTotal, 5, 4, ww - 4, 'left')
   end
 
   love.graphics.setColor(255,255,255,255)

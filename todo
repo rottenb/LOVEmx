@@ -1,31 +1,31 @@
       CLEAN UP (code, dir structure, etc)
-**    joystick
+**      joystick
       ui
       collision (+crash)
-??    alternate materials (slow, slippery, etc)
-??    controls (accel/brake, etc)
-xx    miniMap
-      leaderboard
-xx    bike dashboard
-**    endless scrolling
+??     alternate materials (slow, slippery, etc)
+??      controls (accel/brake, etc)
+xx      miniMap
+**      leaderboard
+xx      bike dashboard
+**      endless scrolling
       splash screen
       level select
-      ai bikers
-xx    lap timer
-**    laps
-**    read spawn position from Tiled map
-**    figure out Sprites layer programmically
-**    Y scroll limits
-**    github
-**    figure out fonts
-      career mode/rpg
+xx      ai bikers
+??      lap timer
+**      laps
+**      read spawn position from Tiled map
+**      figure out Sprites layer programmically
+**      Y scroll limits
+**      github
+**      figure out fonts
+xx      career mode/rpg
       draw more maps
       draw more tiles
       draw more sprites
-xx    implement class/oop
+xx      implement class/oop
       gamestate
-xx    flags (yellow, white, blue?)
-??    restart game
+xx      flags (yellow, white, blue?)
+??      restart game
       animations
       wheelies
       throttle/heat
