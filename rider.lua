@@ -5,7 +5,7 @@ FRAME_SIZE = 64
 
 -- RIDER STATE CONSTANTS
 IDLE = 1
-FORWARD = 3
+GAS = 3
 COAST = 5
 LEFT = 7
 RIGHT = 9
@@ -96,6 +96,12 @@ function RiderInit(spawnX, spawnY, spriteLayer)
     	local x, y = 0, 0
 
       if sprite.riderState == COAST then
+        if sprite.speed > 0 then
+          sprite.speed = sprite.speed - 100
+        end
+        if sprite.speed < 0 then
+          sprite.speed = 0
+        end
         if sprite.heat > 0 then
           sprite.heat = sprite.heat - 1
           if HEAT_ELAPSED > 0 then
@@ -104,13 +110,13 @@ function RiderInit(spawnX, spawnY, spriteLayer)
         end
       end
 
-      local s = 16000
+      local s = 20000
 
       -- joystck controlls
       if joystick ~= nil then
         -- 1 = gas, 2 = brake
         if joystick:isDown(1) then
-          sprite.riderState = FORWARD
+          sprite.riderState = GAS
           local speedX = s
 
           if sprite.effects["slow"] then
@@ -120,7 +126,7 @@ function RiderInit(spawnX, spawnY, spriteLayer)
           end
 
           if sprite.speed < speedX then
-            sprite.speed = sprite.speed + 800
+            sprite.speed = sprite.speed + 1000
           else
             sprite.speed = speedX
           end
@@ -136,9 +142,8 @@ function RiderInit(spawnX, spawnY, spriteLayer)
         end
 
         if joystick:isDown(2) then
-          sprite.riderState = COAST
           if sprite.speed > 0 then
-            sprite.speed = sprite.speed - 100
+            sprite.speed = sprite.speed - 600
           end
           if sprite.speed < 0 then
             sprite.speed = 0
@@ -164,7 +169,7 @@ function RiderInit(spawnX, spawnY, spriteLayer)
 
       -- keyboard
       if love.keyboard.isDown("right") then
-        sprite.riderState = FORWARD
+        sprite.riderState = GAS
         local speedX = s
 
         if sprite.effects["slow"] then

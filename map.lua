@@ -1,32 +1,40 @@
 trackLapList = {}
 lapTotal = 0
 
-segTotal = 4
+segTotal = 5
 trackSegment = {
   "resources/maps/straight.lua",
   "resources/maps/curve1.lua",
   "resources/maps/curve2.lua",
+  "resources/maps/curve3.lua",
   "resources/maps/whoops.lua",
 }
 
 -- WORLD AND MAPS ---
 function MapInit(laps)
-  --lapTotal = laps
-  lapTotal = laps
+  --lapTotal = laps + start + finish
+  lapTotal = laps + 2
 
   -- load tracks, offset for "laps"
   local ox = 0
-  for i=1,laps do
+  for i=1,lapTotal do
     -- tilemap
-    if track_title == "random_run" then
-      trackLapList[i] = sti(trackSegment[love.math.random(1,segTotal)],
-                            {"box2d"}, ox, 0)
+    if trackName == "random_run" then
+      if i == 1 then
+        trackLapList[i] = sti("resources/maps/start.lua", {"box2d"}, ox, 0)
+      elseif i == lapTotal then
+        trackLapList[lapTotal] = sti("resources/maps/finish.lua", {"box2d"}, ox, 0)
+      else
+        trackLapList[i] = sti(trackSegment[love.math.random(1,segTotal)],
+                              {"box2d"}, ox, 0)
+      end
     else
-      trackLapList[i] = sti(track_title, {"box2d"}, ox, 0)
+      trackLapList[i] = sti(trackName, {"box2d"}, ox, 0)
     end
 
     -- physics
     trackLapList[i]:box2d_init(gameWorld)
+
     -- add layer for sprites
     local spawnLayer
     local count = 0

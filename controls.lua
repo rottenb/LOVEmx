@@ -59,11 +59,11 @@ function hitGas()
   if timerStart == false then
     timerStart = true
   end
-  trackLapList[currentLap].layers["Sprites"].sprite.riderState = FORWARD
+  trackLapList[currentLap].layers["Sprites"].sprite.riderState = GAS
 end
 
 function hitBrake()
-  trackLapList[currentLap].layers["Sprites"].sprite.riderState = COAST
+--  trackLapList[currentLap].layers["Sprites"].sprite.riderState = COAST
 end
 
 function turnLeft()

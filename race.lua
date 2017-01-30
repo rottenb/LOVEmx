@@ -35,19 +35,7 @@ function RaceUpdate(dt)
 			sprite.jump = 1
 		end
 	end
---[[
-	if properties["offsetZ"] ~= nil then
-		sprite.effects["offsetZ"] = properties["offsetZ"]
-		if sprite.effects["offsetZ"] > 0 then
-			sprite.effects["rotate"] = math.rad(-sprite.effects["offsetZ"])
-		else
-			sprite.effects["rotate"] = 0
-		end
-	else
-		sprite.effects["rotate"] = 0
-		sprite.effects["offsetZ"] = sprite.effects["offsetZ"]
-	end
-]]
+	
 	LeaderBoardUpdate()
 	LapTimerUpdate(dt)
 
@@ -86,9 +74,19 @@ function RaceDraw(ww, wh)
   love.graphics.push()
   love.graphics.translate(tx, ty)
 
-  for i = 1,lapTotal do
-    trackLapList[i]:setDrawRange(-tx, -ty, ww, wh)
-    trackLapList[i]:draw()
-  end
+	-- draw the previous, current, and next stage of the race
+	-- to give the illusion of scrolling
+	if( currentLap > 1) then
+		trackLapList[currentLap-1]:setDrawRange(-tx, -ty, ww, wh)
+		trackLapList[currentLap-1]:draw()
+	end
+
+	trackLapList[currentLap]:setDrawRange(-tx, -ty, ww, wh)
+	trackLapList[currentLap]:draw()
+
+	if( currentLap < lapTotal) then
+		trackLapList[currentLap+1]:setDrawRange(-tx, -ty, ww, wh)
+		trackLapList[currentLap+1]:draw()
+	end
 
 end

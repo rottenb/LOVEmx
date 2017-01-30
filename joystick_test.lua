@@ -7,6 +7,7 @@ function JoystickTestLoad()
 
   jsList = love.joystick.getJoysticks()
   joystick = jsList[1]
+  exitDown = 0
 
   if joystick ~= nil then
     axNum = joystick:getAxisCount()
@@ -49,6 +50,17 @@ function JoystickTestUpdate(dt)
 
   rightStickX = cut(joystick:getAxis(3), 1) * -1
   rightStickY = cut(joystick:getAxis(6), 1) * -1
+
+  if joystick:isDown(2) then
+    if exitDown >= 0 then
+      exitDown = exitDown + dt
+      if exitDown >= 3 then
+        love.event.quit()
+      end
+    end
+  else
+    exitDown = 0
+  end
 end
 
 function cut(longNum, n)
@@ -60,6 +72,9 @@ function JoystickTestDraw()
   local w = love.graphics.getWidth()
   local h = love.graphics.getHeight()
   local vspc = 30
+
+  love.graphics.setColor(0,0,0,200)
+  love.graphics.rectangle('fill', 0, 0, w, h)
 
   if joystick == nil then
     love.graphics.setColor(255,0,0,255)
@@ -78,12 +93,13 @@ function JoystickTestDraw()
 
   -- OS name for controller
   love.graphics.setColor(255,255,0,255)
-  love.graphics.printf(joystick:getName(), 0, 0, w, 'center')
+  local str = "Name: " .. joystick:getName()
+  love.graphics.printf(str, 0, 0, w, 'center')
 
   -- button values
   love.graphics.setColor(255,0,0,255)
   for i = 1,btNum do
-    local btStr = "Button " .. i .. ": "
+    local btStr = "Button " .. string.format("%2d",i) .. ": "
     local bt = "0"
 
     if joystick:isDown(i) then
@@ -147,6 +163,15 @@ function JoystickTestDraw()
                     math.rad(180 * math.abs(1 - leftTrig)), 300)
   love.graphics.arc('line', 'open', 659, 180, 25, math.rad(0),
                     math.rad(180 * math.abs(1 - rightTrig)), 300)
+
+  -- exit timer
+  love.graphics.setColor(255,0,0,180)
+  if exitDown > 0 then
+    love.graphics.printf("Time to exit: " .. string.format("%d", 4 - exitDown), 0, 30, w, 'center')
+  else
+    love.graphics.printf("Hold Button #2 to exit", 0, 30, w, 'center')
+  end
+
 
 
 end

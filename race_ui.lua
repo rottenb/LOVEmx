@@ -19,10 +19,25 @@ function RaceUIDraw()
     love.graphics.pop()
 
     -- FPS counter
-		love.graphics.setColor(0,255,0,200)
+		love.graphics.setColor(0,255,0,255)
 		local fps = "FPS: " .. love.timer.getFPS()
     love.graphics.printf(fps, 0, 0, ww, 'center')
-  else
+
+    -- rider speed
+    love.graphics.printf(sprite.speed, 0, 33, ww, 'center')
+
+    -- rider STATE
+    if sprite.riderState == IDLE then
+      love.graphics.printf("IDLE", 0, 65, ww, 'center')
+    elseif sprite.riderState == COAST then
+      love.graphics.printf("COAST", 0, 65, ww, 'center')
+    elseif sprite.riderState == GAS then
+      love.graphics.printf("GAS", 0, 65, ww, 'center')
+    end
+
+    love.graphics.setColor(0,0,0,120)
+    love.graphics.rectangle('fill', ww/2 - 85, 44, 170, 80)
+  else -- DEBUG
     love.graphics.pop()
   end
 

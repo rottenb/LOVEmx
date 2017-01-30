@@ -17,16 +17,14 @@ leaderBoard = {
   [5] = {canvas = nil, posX = 0, posY = 0, swapCount = 0, win = 0},
 }
 
-posArchY = { }
-posArchX = { }
+posArchY = {-5, -10, -15, -30, -35, -30,  -15,  -10,   -5}
+posArchX = {-5, -10, -25, -50, -80, -110, -150, -175, -love.graphics.getWidth()/RIDER_TOTAL}
+
 
 function LeaderBoardLoad()
   ww = love.graphics.getWidth()/RIDER_TOTAL
   wh = 40
 	leaderBoardFont = love.graphics.newFont("resources/fonts/ledcounter7.ttf", 30)
-
-  posArchY = {-5, -10, -15, -30, -35, -30,  -15,  -10,   -5}
-  posArchX = {-5, -10, -25, -50, -80, -110, -150, -175, -ww}
 
   for i = 1, RIDER_TOTAL do
     leaderBoard[i].canvas = love.graphics.newCanvas(ww, wh)

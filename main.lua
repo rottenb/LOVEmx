@@ -22,7 +22,9 @@ RACE = 2
 FINISH = 3
 TEST = 666
 
-GAME_STATE = RACE
+GAME_STATE = MAIN
+
+trackName = "random_run"
 
 -- ***************
 -- * love.load() *
@@ -31,18 +33,13 @@ function love.load(arg)
   MenuLoad()
   -- read in track name from command line.
   -- if track doesn't exist, load the demo_track
-  track_title = "none"
   if arg[2] then
-    track_title = MAP_PATH .. arg[2] .. ".lua"
+    trackName = MAP_PATH .. arg[2] .. ".lua"
   end
 
-  if arg[3] == "debug" then
-    DEBUG = true
-  end
-
-  if love.filesystem.exists(track_title) == false then
-    track_title = MAP_PATH .. "demo_track.lua"
-    track_title = "random_run"
+  if love.filesystem.exists(trackName) == false then
+    trackName = MAP_PATH .. "demo_track.lua"
+    trackName = "random_run"
   end
 
   love.physics.setMeter(32)
@@ -52,9 +49,6 @@ function love.load(arg)
   -- INPUT --
   InitJoystick()
   ControlsInit()
-
-  --love.graphics.setDefaultFilter("nearest", "nearest")
-
 
   -- LAP COUNTER --
   currentLap = 1
@@ -103,12 +97,11 @@ function love.update(dt)
   elseif GAME_STATE == FINISH then
     if love.keyboard.isDown("space") then
       GAME_STATE = RACE
-      local arg = {track_title}
+      local arg = {trackName}
       love.load(arg)
     end
   end
 end -- love.update()
-
 
 -- *************
 -- * love.draw *

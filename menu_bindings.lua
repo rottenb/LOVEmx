@@ -8,7 +8,11 @@ bindings = {
   back = function() MenuBack() end,
 }
 
-keys = { }
+keys = {
+  up = "up",
+  down = "down",
+  enter = "select",
+}
 
 gamepad = {
   u = "up",
