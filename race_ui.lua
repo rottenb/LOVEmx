@@ -12,6 +12,9 @@ function RaceUIDraw()
     love.graphics.setColor(255, 0, 0, 255)
     love.graphics.polygon('line', sprite.body:getWorldPoints(sprite.shape:getPoints()))
 
+    love.graphics.setColor(0,0,255,255)
+    love.graphics.rectangle('line', sprite.x-32, sprite.y-32, 64, 64)
+
 		-- player location offset
 		love.graphics.setColor(255,255,255,255)
 		love.graphics.circle('fill', sprite.x, sprite.y, 5)
@@ -24,19 +27,25 @@ function RaceUIDraw()
     love.graphics.printf(fps, 0, 0, ww, 'center')
 
     -- rider speed
-    love.graphics.printf(sprite.speed, 0, 33, ww, 'center')
+    love.graphics.printf(TrimNum(sprite.body:getLinearVelocity(), 2), 0, 33, ww, 'center')
 
     -- rider STATE
     if sprite.riderState == IDLE then
+      love.graphics.setColor(255,255,255,255)
       love.graphics.printf("IDLE", 0, 65, ww, 'center')
     elseif sprite.riderState == COAST then
+      love.graphics.setColor(0,0,255,255)
       love.graphics.printf("COAST", 0, 65, ww, 'center')
     elseif sprite.riderState == GAS then
+      love.graphics.setColor(0,255,0,255)
       love.graphics.printf("GAS", 0, 65, ww, 'center')
+    elseif sprite.riderState == BRAKE then
+      love.graphics.setColor(255,0,0,255)
+      love.graphics.printf("BRAKE", 0, 65, ww, 'center')
     end
 
     love.graphics.setColor(0,0,0,120)
-    love.graphics.rectangle('fill', ww/2 - 85, 44, 170, 80)
+    love.graphics.rectangle('fill', ww/2 - 85, 44, 170, 60)
   else -- DEBUG
     love.graphics.pop()
   end

@@ -45,14 +45,8 @@ function love.joystickreleased(joystick, button)
 end
 
 function love.joystickhat(joystick, hat, dir)
-  if  dir == "u" or
-      dir == "d" or
-      dir == "c" or
-      dir == "l" or
-      dir == "r"    then
-    local binding = gamepad[dir]
-    return inputHandler(binding)
-  end
+  local binding = gamepad[dir]
+  return inputHandler(binding)
 end
 
 function hitGas()
@@ -63,15 +57,15 @@ function hitGas()
 end
 
 function hitBrake()
---  trackLapList[currentLap].layers["Sprites"].sprite.riderState = COAST
+  trackLapList[currentLap].layers["Sprites"].sprite.riderState = BRAKE
 end
 
 function turnLeft()
-  trackLapList[currentLap].layers["Sprites"].sprite.riderState = LEFT
+  --trackLapList[currentLap].layers["Sprites"].sprite.riderState = LEFT
 end
 
 function turnRight()
-  trackLapList[currentLap].layers["Sprites"].sprite.riderState = RIGHT
+  --trackLapList[currentLap].layers["Sprites"].sprite.riderState = RIGHT
 end
 
 function coast()
@@ -79,15 +73,10 @@ function coast()
 end
 
 function wheelieUp()
-  trackLapList[currentLap].layers["Sprites"].sprite.riderState = WHEELIEUP
-  WHEELIE_COUNTER = 0
 end
 
 function wheelieDown()
-  trackLapList[currentLap].layers["Sprites"].sprite.riderState = COAST
-  WHEELIE_COUNTER = -1
 end
 
 function jump()
-  trackLapList[currentLap].layers["Sprites"].sprite.jump = 1
 end

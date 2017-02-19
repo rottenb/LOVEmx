@@ -42,20 +42,21 @@ buttonDot = {
 }
 
 function JoystickTestUpdate(dt)
-  leftTrig = cut(joystick:getAxis(4), 4) * -1
-  rightTrig = cut(joystick:getAxis(5), 4) * -1
+  leftTrig = TrimNum(joystick:getAxis(4), 4) * -1
+  rightTrig = TrimNum(joystick:getAxis(5), 4) * -1
 
-  leftStickX = cut(joystick:getAxis(1), 1) * -1
-  leftStickY = cut(joystick:getAxis(2), 1) * -1
+  leftStickX = TrimNum(joystick:getAxis(1), 1) * -1
+  leftStickY = TrimNum(joystick:getAxis(2), 1) * -1
 
-  rightStickX = cut(joystick:getAxis(3), 1) * -1
-  rightStickY = cut(joystick:getAxis(6), 1) * -1
+  rightStickX = TrimNum(joystick:getAxis(3), 1) * -1
+  rightStickY = TrimNum(joystick:getAxis(6), 1) * -1
 
   if joystick:isDown(2) then
     if exitDown >= 0 then
       exitDown = exitDown + dt
       if exitDown >= 3 then
-        love.event.quit()
+        --love.event.quit()
+        menuState = MENU
       end
     end
   else
@@ -63,10 +64,6 @@ function JoystickTestUpdate(dt)
   end
 end
 
-function cut(longNum, n)
-  local shift = 10 ^ n
-  return math.floor(longNum*shift + 0.5) / shift
-end
 
 function JoystickTestDraw()
   local w = love.graphics.getWidth()
@@ -145,7 +142,7 @@ function JoystickTestDraw()
   love.graphics.setColor(0,255,0,255)
   for i = 1,axNum do
     local axStr = "Axis " .. i .. ": "
-    local ax = cut(joystick:getAxis(i), 2)
+    local ax = TrimNum(joystick:getAxis(i), 2)
     love.graphics.printf(axStr, 0, vspc * (i + 1), w - 100, 'right')
     love.graphics.printf(ax, 0, vspc * (i + 1), w, 'right')
   end

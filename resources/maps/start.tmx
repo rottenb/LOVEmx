@@ -31,7 +31,7 @@
   </tile>
   <tile id="5">
    <properties>
-    <property name="offsetZ" type="int" value="-16"/>
+    <property name="offsetZ" type="int" value="-32"/>
    </properties>
   </tile>
   <tile id="8">

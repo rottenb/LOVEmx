@@ -3,7 +3,6 @@ ANIM_FLIP = 0.05
 
 WHEELIE_COUNTER = -1
 
-
 -- WHAT TO DO DURING A RACE --
 function RaceUpdate(dt)
 	trackLapList[currentLap]:update(dt)
@@ -25,17 +24,15 @@ function RaceUpdate(dt)
 	local tileX = math.floor(sprite.x/32 - ox)+1
 	local tileY = math.floor(sprite.y/32)
 
-	local properties = trackLapList[currentLap]:getTileProperties("rider_effects", tileX, tileY)
-	if sprite.jump == 0 then
-		sprite.effects["slow"] = properties["slow"]
+	if tileY <= 1 then
+		tileY = 1
+	elseif tileY >= trackLapList[currentLap].height then
+		tileY = trackLapList[currentLap].height
 	end
 
-	if properties["offsetZ"] ~= nil then
-		if properties["offsetZ"] > 0 then
-			sprite.jump = 1
-		end
-	end
-	
+	local properties = trackLapList[currentLap]:getTileProperties("rider_effects", tileX, tileY)
+
+
 	LeaderBoardUpdate()
 	LapTimerUpdate(dt)
 

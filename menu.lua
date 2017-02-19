@@ -6,13 +6,14 @@ menuState = MENU
 
 currentItem = GAME
 
+splashRotate = 0
+
 mainMenuList = {
   "GAME",
   "JOYSTICK TEST",
   "EXIT"
 }
 
-splashRotate = 0
 
 function inputHandler(input)
   local action = bindings[input]
@@ -39,17 +40,26 @@ end
 function MenuDown()
   if menuState ~= OPTIONS then
     if currentItem < 3 then
-      currentItem = currentItem + 1
+      if joystick == nil then
+        currentItem = currentItem + 2
+      else
+        currentItem = currentItem + 1
+      end
     else
       currentItem = 1
     end
+
   end
 end
 
 function MenuUp()
   if menuState ~= OPTIONS then
     if currentItem > 1 then
-      currentItem = currentItem - 1
+      if joystick == nil then
+        currentItem = currentItem - 2
+      else
+        currentItem = currentItem - 1
+      end
     else
       currentItem = 3
     end
@@ -81,6 +91,10 @@ function MenuLoad()
   splashImg = love.graphics.newImage("resources/util/splash.png")
   splashImg:setFilter("nearest", "nearest")
 
+  logoImg = love.graphics.newImage("resources/util/logo.png")
+
+  coinChime = love.audio.newSource("resources/sfx/smb3_coin.wav", 'stream')
+
   require "joystick_test"
   JoystickTestLoad()
 end
@@ -88,7 +102,7 @@ end
 function MenuUpdate(dt)
   splashRotate = splashRotate + 36
 
-  if currentItem == OPTIONS then
+  if currentItem == OPTIONS and joystick ~= nil then
     JoystickTestUpdate(dt)
   end
 end
@@ -99,9 +113,14 @@ function MenuDraw()
 
   local rot
   local sc
+
   if splashRotate < 360 then
     rot = math.rad(splashRotate)
     sc = rot/10
+  elseif splashRotate == 360 then
+    love.graphics.setColor(255,255,255,255)
+    love.graphics.draw(logoImg, ww/2, wh/2)
+    coinChime:play()
   else
     rot = math.rad(360)
     sc = 0.5
@@ -110,9 +129,14 @@ function MenuDraw()
   love.graphics.setColor(255,255,255,180)
   love.graphics.draw(splashImg, ww/2, wh/2, rot, sc, sc, ww, wh)
 
+  if splashRotate > 360 then
+    love.graphics.setColor(255,255,255,255)
+    love.graphics.draw(logoImg, ww/2 - logoImg:getWidth()/4, wh/2 - logoImg:getHeight()/2, rot, sc, sc)
+  end
+
   if menuState == MENU then
     for i = 1,3 do
-      local h = (wh/2 - 125) + (50*i)
+      local h = (wh/2) + (50*i)
       if i == currentItem then
         love.graphics.setFont(selectFont)
         love.graphics.setColor(255,255,0,255)
@@ -122,13 +146,14 @@ function MenuDraw()
         love.graphics.setColor(255,255,255,100)
       end
 
+      if joystick == nil and i == OPTIONS then
+        love.graphics.setFont(menuFont)
+        love.graphics.setColor(180,180,180,50)
+      end
+
       love.graphics.printf(mainMenuList[i], 0, h, ww, 'center')
     end
   elseif menuState == OPTIONS then
     JoystickTestDraw()
   end
-
---  love.graphics.setColor(255,0,0,50)
---  love.graphics.line(0,wh/2,ww,wh/2)
-
 end

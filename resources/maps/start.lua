@@ -135,7 +135,7 @@ return {
         {
           id = 5,
           properties = {
-            ["offsetZ"] = -16
+            ["offsetZ"] = -32
           }
         },
         {

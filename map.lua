@@ -13,10 +13,11 @@ trackSegment = {
 -- WORLD AND MAPS ---
 function MapInit(laps)
   --lapTotal = laps + start + finish
-  lapTotal = laps + 2
+  lapTotal = laps
 
   -- load tracks, offset for "laps"
   local ox = 0
+
   for i=1,lapTotal do
     -- tilemap
     if trackName == "random_run" then
@@ -50,6 +51,7 @@ function MapInit(laps)
 
     ox = ox + trackLapList[i].width*32
   end
+
 
   -- print version numbers of libraries/modules
   if DEBUG then

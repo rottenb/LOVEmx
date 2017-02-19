@@ -13,7 +13,7 @@ function love.conf(t)
   t.window.width = 960
   t.title = "LOVEmx: Motocross Round #3 - Thunder Valley, Colorado"
 
-  t.modules.audio    = false
+  t.modules.audio    = true
 	t.modules.event    = true
 	t.modules.graphics = true
 	t.modules.image    = true
@@ -22,7 +22,7 @@ function love.conf(t)
 	t.modules.math     = true
 	t.modules.mouse    = true
 	t.modules.physics  = true
-	t.modules.sound    = false
+	t.modules.sound    = true
 	t.modules.system   = true
 	t.modules.timer    = true
 	t.modules.window   = true

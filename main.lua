@@ -1,7 +1,8 @@
--- PREAMBLE --
+NUMBER_OF_LAPS = 10
 
 -- REQUIREMENTS --
 sti = require "sti"
+require "util"
 require "menu"
 require "map"
 require "rider"
@@ -10,6 +11,7 @@ require "controls"
 require "race_ui"
 require "leaderboard"
 require "lap_timer"
+
 
 -- MISC FLAGS, COUNTERS, AND SUCH
 DRAW_COLLISION = true
@@ -42,9 +44,9 @@ function love.load(arg)
     trackName = "random_run"
   end
 
-  love.physics.setMeter(32)
+  love.physics.setMeter(30)
   gameWorld = love.physics.newWorld(0,0)
-  MapInit(10)
+  MapInit(NUMBER_OF_LAPS)
 
   -- INPUT --
   InitJoystick()

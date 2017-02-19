@@ -11,7 +11,7 @@ bindings = {
 keys = {
   up = "up",
   down = "down",
-  enter = "select",
+  space = "select",
 }
 
 gamepad = {
